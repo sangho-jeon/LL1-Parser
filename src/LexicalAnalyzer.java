@@ -8,7 +8,6 @@ import java.util.*;
 
 public class LexicalAnalyzer { // lexical analyzing class.
 
-    private HashMap<String, LinkedList<String>> first = new HashMap<>();
     private Path file;
 
     public LexicalAnalyzer() {
@@ -29,7 +28,7 @@ public class LexicalAnalyzer { // lexical analyzing class.
                 StringTokenizer st = new StringTokenizer(line, ";| +-*/", true);
                 while (st.hasMoreElements()) {
                     String token = st.nextToken();
-                    if(token.isBlank())
+                    if (token.isBlank())
                         continue;
 
                     NextToken type;
@@ -46,7 +45,8 @@ public class LexicalAnalyzer { // lexical analyzing class.
                     }
                 }
             }
-            lexims.add(tokensOfLine);
+            if(!tokensOfLine.isEmpty())
+                lexims.add(tokensOfLine);
             return lexims;
         } catch (IOException e) {
             System.out.println("File not Found");
@@ -63,7 +63,6 @@ public class LexicalAnalyzer { // lexical analyzing class.
             return false;
         }
     }
-
 
     private NextToken getTokenType(String token) {
         switch (token) {
