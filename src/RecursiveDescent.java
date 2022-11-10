@@ -28,6 +28,10 @@ public class RecursiveDescent {
         for (ArrayList<Token> line :
                 tokenStream) {
             STATE state = STATE.IDLE_STATE;
+            for (Token T:
+                 line) {
+                T.out();
+            }
 
         }
     }
