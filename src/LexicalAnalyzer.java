@@ -18,35 +18,39 @@ public class LexicalAnalyzer { // lexical analyzing class.
         this.file = Paths.get(path);
     }
 
-    public ArrayList<ArrayList<Token>> Lexical() { // returns Lexical analyzed tokens;
+    public ArrayList<Queue<Token>> Lexical() { // returns Lexical analyzed tokens;
         try (BufferedReader reader = Files.newBufferedReader(this.file)) {
-            ArrayList<ArrayList<Token>> lexims = new ArrayList<>();
+            ArrayList<Queue<Token>> lexims = new ArrayList<>();
             String line;
-            ArrayList<Token> tokensOfLine = new ArrayList<>();
+            Queue<Token> tokensOfLine = new LinkedList<>();
 
             while ((line = reader.readLine()) != null) {
-                StringTokenizer st = new StringTokenizer(line, ";| +-*/", true);
+                StringTokenizer st = new StringTokenizer(line, ";| +-*/()", true);
                 while (st.hasMoreElements()) {
                     String token = st.nextToken();
-                    if (token.isBlank())
-                        continue;
+                    if (token.isBlank()) continue;
 
                     NextToken type;
                     if (isNumeric(token)) {
-                        tokensOfLine.add(new Token<>(NextToken.CONST, Integer.parseInt(token)));
+                        tokensOfLine.add(new Token(NextToken.CONST, token));
                     } else {
                         type = getTokenType(token);
-                        tokensOfLine.add(new Token<>(type, token));
+                        tokensOfLine.add(new Token(type, token));
                     }
 
                     if (Objects.equals(token, ";")) {
                         lexims.add(tokensOfLine);
-                        tokensOfLine = new ArrayList<>();
+                        tokensOfLine = new LinkedList<>();
                     }
                 }
             }
-            if(!tokensOfLine.isEmpty())
+            if (!tokensOfLine.isEmpty()) {
+                Token semiColon = new Token(NextToken.SEMI_COLON, ";");
+                if(!tokensOfLine.contains(semiColon)){
+                    tokensOfLine.add(semiColon);
+                }
                 lexims.add(tokensOfLine);
+            }
             return lexims;
         } catch (IOException e) {
             System.out.println("File not Found");
@@ -69,11 +73,9 @@ public class LexicalAnalyzer { // lexical analyzing class.
             case ":=":
                 return NextToken.ASSIGNMENT_OP;
             case "+":
-                return NextToken.ADD_OPERATOR;
             case "-":
                 return NextToken.ADD_OPERATOR;
             case "*":
-                return NextToken.MULT_OPERATIOR;
             case "/":
                 return NextToken.MULT_OPERATIOR;
             case "(":
