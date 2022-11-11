@@ -186,6 +186,7 @@ public class RecursiveDescent {
             } else
                 sb.append(value).append(" ");
         }
+        sb.append("\n");
         System.out.println(sb);
     }
 
@@ -210,7 +211,7 @@ public class RecursiveDescent {
 
     private void printWarning(String ident) {
         StringBuilder sb = new StringBuilder();
-        sb.append("정의되지 않은 변수 ").append(ident).append("가 참조됨");
+        sb.append(WARN).append("정의되지 않은 변수 ").append(ident).append("가 참조됨");
         System.out.println(sb);
     }
 }
